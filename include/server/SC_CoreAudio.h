@@ -144,6 +144,7 @@ protected:
 	bool mRunThreadFlag;
 	uint32 mSafetyOffset;
 	PriorityQueueT<SC_ScheduledEvent, 2048> mScheduler;
+	PriorityQueueT<SC_ScheduledEvent, 2048> mBlockScheduler;	// block sched queue
 	int mNumSamplesPerCallback;
 	uint32 mPreferredHardwareBufferFrameSize;
 	uint32 mPreferredSampleRate;
@@ -215,6 +216,11 @@ public:
 	double GetPeakCPU() const { return mPeakCPU; }
 	double GetSampleRate() const { return mSampleRate; }
 	double GetActualSampleRate() const { return mSmoothSampleRate; }
+
+	// block sched
+	void ClearBlockSched() { mBlockScheduler.Empty(); }
+	void AddBlockEvent(SC_ScheduledEvent& event) { mBlockScheduler.Add(event); }
+	double GetStartSampleTime( ) const { return mStartSampleTime; }
 };
 
 extern SC_AudioDriver* SC_NewAudioDriver(struct World* inWorld);

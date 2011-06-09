@@ -280,6 +280,7 @@ void Node_SendTrigger(Node* inNode, int triggerID, float value)
 	msg.mNodeID = inNode->mID;
 	msg.mTriggerID = triggerID;
 	msg.mValue = value;
+	msg.mBufCounter = world->mBufCounter;	// world blk trigger msg
 	world->hw->mTriggers.Write(msg);
 }
 

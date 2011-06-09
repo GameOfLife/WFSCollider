@@ -1088,14 +1088,16 @@ void TriggerMsg::Perform()
 {
 	small_scpacket packet;
 	packet.adds("/tr");
-	packet.maketags(4);
+	packet.maketags(5);
 	packet.addtag(',');
 	packet.addtag('i');
 	packet.addtag('i');
 	packet.addtag('f');
+	packet.addtag('i');		// world blk trigger msg
 	packet.addi(mNodeID);
 	packet.addi(mTriggerID);
 	packet.addf(mValue);
+	packet.addi(mBufCounter);	// world blk trigger msg
 
 	ReplyAddress *users = mWorld->hw->mUsers;
 	int numUsers = mWorld->hw->mNumUsers;

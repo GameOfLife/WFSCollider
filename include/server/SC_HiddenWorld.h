@@ -42,6 +42,7 @@ struct TriggerMsg {
 	int32 mNodeID;
 	int32 mTriggerID;
 	float mValue;
+	uint32 mBufCounter;	//  world blk trigger msg
 
 	void Perform();
 };

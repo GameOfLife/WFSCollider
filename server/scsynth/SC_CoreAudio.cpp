@@ -327,6 +327,28 @@ PacketStatus PerformOSCPacket(World *world, OSC_Packet *packet, SC_ScheduledEven
 	} else {
 		// in real time engine, schedule the packet
 		int64 time = OSCtime(packet->mData + 8);
+
+// ---> block sched
+		if ((time > 1) && (time <= 0x0FFFffffFFFFffffLL)) {
+		
+		//	time -= driver->GetStartSampleTime( );	// from HAL time to local buf count
+			
+			// to do: shift value instead of a division by world->mBufLength
+			uint32 target_block = (uint32)(time / world->mBufLength);
+			
+		//	scprintf("osc block sched: %lld\n", time );
+		//	scprintf("current block: %ld target block: %ld\n", world->mBufCounter, target_block);
+
+			if ((world->mBufCounter >= target_block) && (world->mVerbosity >= 0)) {
+				scprintf("late %lu blocks.\n", world->mBufCounter - target_block);
+			}
+
+			SC_ScheduledEvent event(world, time, packet, freeFunc);
+			driver->AddBlockEvent(event);
+			return PacketScheduled;
+
+		} else {
+		// <--- end block sched
 		if (time == 0 || time == 1) {
 			PerformOSCBundle(world, packet);
 			return PacketPerformed;
@@ -347,6 +369,7 @@ PacketStatus PerformOSCPacket(World *world, OSC_Packet *packet, SC_ScheduledEven
 			SC_ScheduledEvent event(world, time, packet, freeFunc);
 			driver->AddEvent(event);
 			return PacketScheduled;
+			}
 		}
 	}
 }
@@ -1305,6 +1328,23 @@ void SC_CoreAudioDriver::Run(const AudioBufferList* inInputData,
 				}
 			}
 			//count++;
+
+			// ---> block sched
+			int64 schedSamplePos;
+			int64 blockSamplePos = (int64)bufCounter * world->mBufLength;
+			int64 nextBlockSamplePos = blockSamplePos + world->mBufLength;
+			world->mSubsampleOffset = 0.0;
+			while (schedSamplePos = mBlockScheduler.NextTime(),  schedSamplePos < nextBlockSamplePos) {
+				world->mSampleOffset = (int)(schedSamplePos - blockSamplePos);
+				if (world->mSampleOffset < 0) world->mSampleOffset = 0;
+				else if (world->mSampleOffset >= world->mBufLength) world->mSampleOffset = world->mBufLength - 1;
+				
+				//scprintf("perform -> bufCounter: %d mSampleOffset: %d\n", bufCounter, world-mSampleOffset);
+				
+				SC_ScheduledEvent event = mBlockScheduler.Remove();
+				event.Perform();
+			}
+			// <--- end block sched
 
 			int64 schedTime;
 			int64 nextTime = oscTime + oscInc;

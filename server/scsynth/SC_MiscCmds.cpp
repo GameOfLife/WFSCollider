@@ -1307,6 +1307,7 @@ SCErr meth_clearSched(World *inWorld, int inSize, char *inData, ReplyAddress *in
 {
 	if(inWorld->mRealTime){
 		inWorld->hw->mAudioDriver->ClearSched();
+		inWorld->hw->mAudioDriver->ClearBlockSched();
 	}
 	return kSCErr_None;
 }
@@ -1843,6 +1844,31 @@ SCErr meth_error(World *inWorld, int inSize, char *inData, ReplyAddress* /*inRep
 	return kSCErr_None;
 }
 
+// sampleStartTime cmd --->
+SCErr meth_sampleStartTime(World *inWorld, int inSize, char *inData, ReplyAddress *inReply);
+SCErr meth_sampleStartTime(World *inWorld, int inSize, char *inData, ReplyAddress* inReply)
+{
+	sc_msg_iter msg(inSize, inData);
+		
+	double sampleStartTime = inWorld->hw->mAudioDriver->GetStartSampleTime( );
+	
+	small_scpacket packet;
+	packet.BeginMsg();
+	packet.adds("/sampleStartTime");
+	packet.maketags(2);
+	packet.addtag(',');
+	packet.addtag('d');
+	packet.addd(sampleStartTime);
+	packet.EndMsg();
+	
+	if (packet.size()) {
+		CallSequencedCommand(SendReplyCmd, inWorld, packet.size(), packet.data(), inReply);
+	}
+	
+	return kSCErr_None;
+}
+// <---
+
 #define NEW_COMMAND(name) NewCommand(#name, cmd_##name, meth_##name)
 
 void initMiscCommands();
@@ -1930,6 +1956,8 @@ void initMiscCommands()
 	NEW_COMMAND(sync);
 	NEW_COMMAND(g_dumpTree);
 	NEW_COMMAND(g_queryTree);
+	
+	NEW_COMMAND(sampleStartTime); // br
 
 	NEW_COMMAND(error);
 }

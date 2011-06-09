@@ -1292,6 +1292,55 @@ int prSetControlBusValues(VMGlobals *g, int numArgsPushed)
 	return errNone;
 }
 
+// pos sched --->
+int makePosSynthBundle(big_scpacket *packet, PyrSlot *slots, int size)
+{
+	int err;
+	uint64 position;
+	double inPosition;
+	
+	err = slotDoubleVal(slots, &inPosition);
+	if (err) inPosition = 1;
+
+	position = (uint64)inPosition;
+
+	//post("makePosSynthBundle -> position : %llu %016llx \n", position, position);	
+
+	packet->OpenBundle(position);
+	for (int i=1; i<size; ++i) {
+		if (isKindOfSlot(slots+i, class_array)) {
+			PyrObject *obj = slotRawObject(&slots[i]);
+			makeSynthMsgWithTags(packet, obj->slots, obj->size);
+		}
+	}
+	packet->CloseBundle();
+	return errNone;
+}
+
+int prNetAddr_SendPosBundle(VMGlobals *g, int numArgsPushed);
+int prNetAddr_SendPosBundle(VMGlobals *g, int numArgsPushed)
+{	
+	PyrSlot* netAddrSlot = g->sp - numArgsPushed + 1;
+	PyrSlot* args = netAddrSlot + 1;
+	big_scpacket packet;
+	
+	double position;
+	int err = slotDoubleVal(args, &position);
+	if (err) position = 1;
+	
+	//post("prNetAddr_SendPosBundle -> position: %f %#018x \n", position, position);
+
+	SetFloat(args, position);
+	int numargs = numArgsPushed - 1;
+	makePosSynthBundle(&packet, args, numargs);
+	
+	//for (int i=0; i<packet.size()/4; i++) post("%d %08X\n", i, packet.buf[i]);
+	
+	return netAddrSend(slotRawObject(netAddrSlot), packet.size(), (char*)packet.buf);
+
+}
+// <--- pos sched
+
 void init_OSC_primitives();
 void init_OSC_primitives()
 {
@@ -1304,6 +1353,7 @@ void init_OSC_primitives()
 	definePrimitive(base, index++, "_NetAddr_Disconnect", prNetAddr_Disconnect, 1, 0);
 	definePrimitive(base, index++, "_NetAddr_SendMsg", prNetAddr_SendMsg, 1, 1);
 	definePrimitive(base, index++, "_NetAddr_SendBundle", prNetAddr_SendBundle, 2, 1);
+	definePrimitive(base, index++, "_NetAddr_SendPosBundle", prNetAddr_SendPosBundle, 2, 1);
 	definePrimitive(base, index++, "_NetAddr_SendRaw", prNetAddr_SendRaw, 2, 0);
 	definePrimitive(base, index++, "_NetAddr_GetBroadcastFlag", prNetAddr_GetBroadcastFlag, 1, 0);
 	definePrimitive(base, index++, "_NetAddr_SetBroadcastFlag", prNetAddr_SetBroadcastFlag, 2, 0);

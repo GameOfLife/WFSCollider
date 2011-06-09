@@ -587,6 +587,23 @@ void SC_JackDriver::Run()
 				*tch++ = bufCounter;
 			}
 
+			// ---> block sched
+			int64 schedSamplePos;
+			int64 blockSamplePos = (int64)bufCounter * world->mBufLength;
+			int64 nextBlockSamplePos = blockSamplePos + world->mBufLength;
+			world->mSubsampleOffset = 0.0;
+			while (schedSamplePos = mBlockScheduler.NextTime(),  schedSamplePos < nextBlockSamplePos) {
+				world->mSampleOffset = (int)(schedSamplePos - blockSamplePos);
+				if (world->mSampleOffset < 0) world->mSampleOffset = 0;
+				else if (world->mSampleOffset >= world->mBufLength) world->mSampleOffset = world->mBufLength - 1;
+				
+				//scprintf("perform -> bufCounter: %d mSampleOffset: %d\n", bufCounter, world->mSampleOffset);
+				
+				SC_ScheduledEvent event = mBlockScheduler.Remove();
+				event.Perform();
+			}
+			// <--- end block sched
+
 			// run engine
 			int64 schedTime;
 			int64 nextTime = oscTime + oscInc;
