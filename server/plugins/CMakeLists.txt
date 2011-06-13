@@ -51,6 +51,8 @@ set(plugin_sources
 	UnpackFFTUGens.cpp
 
 	UIUGens.cpp
+
+	SampleSchedUGens.cpp
 )
 
 set(plugins "")
@@ -75,7 +77,7 @@ foreach(plugin ${plugin_sources})
 	list(APPEND plugins ${plugin_name})
 endforeach(plugin)
 
-set(uiugens UIUGens)
+set(uiugens MouseUGens KeyboardUGens)
 
 if (WIN32)
     if(MSVC)
@@ -143,7 +145,7 @@ if (SUPERNOVA)
                     APPEND PROPERTY COMPILE_DEFINITIONS  "SUPERNOVA")
 	endforeach(plugin)
 
-	list(APPEND uiugens UIUGens_supernova)
+	list(APPEND uiugens KeyboardUGens_supernova MouseUGens_supernova)
 
 	add_library(FFT_UGens_supernova MODULE
 				FFTInterfaceTable.cpp
@@ -227,7 +229,7 @@ if (CMAKE_SYSTEM_NAME MATCHES "Linux")
 		message(FATAL_ERROR "libxt not found")
 	endif()
 
-	include_directories(${X11_Xt_INCLUDE_PATH})
+	include_directories(X11_Xt_INCLUDE_PATH)
 
 	foreach (ugen ${uiugens})
 		target_link_libraries(${ugen} ${X11_X11_LIB})
@@ -248,21 +250,22 @@ if (APPLE)
 	# determines the app name and app install location (scappbundlename, scappdir):
 	include (${CMAKE_SOURCE_DIR}/cmake_modules/MacAppFolder.cmake)
 
-	install(TARGETS ${plugins} ${supernova_plugins}
+	install(TARGETS ${plugins}
 			DESTINATION "${scappauxresourcesdir}/plugins"
 			PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
-        if (SUPERNOVA)
-                install(TARGETS ${supernova_plugins}
-                        DESTINATION "${scappauxresourcesdir}/supernova_plugins"
-                        PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
-        endif()
 elseif (WIN32)
-	install(TARGETS ${plugins} ${supernova_plugins}
+	install(TARGETS ${plugins}
 			DESTINATION "SuperCollider/plugins"
 			PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 else()
-	install(TARGETS ${plugins} ${supernova_plugins}
+	install(TARGETS ${plugins}
 			DESTINATION "lib/SuperCollider/plugins"
 			PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+
+	if (SUPERNOVA)
+		install(TARGETS ${supernova_plugins}
+			DESTINATION "lib/supernova/plugins"
+			PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+	endif()
 endif()
