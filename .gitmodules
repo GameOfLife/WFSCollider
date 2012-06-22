@@ -4,3 +4,15 @@
 [submodule "external_libraries/nova-tt"]
 	path = external_libraries/nova-tt
 	url = git://supercollider.git.sourceforge.net/gitroot/supercollider/nova-tt
+[submodule "submodules/quarks"]
+	path = submodules/quarks
+	url = git://github.com/miguel-negrao/Quarks.git
+[submodule "submodules/WFS Library"]
+	path = submodules/WFS Library
+	url = git://github.com/GameOfLife/WFSCollider-Class-Library.git
+[submodule "submodules/Unit Lib"]
+	path = submodules/Unit Lib
+	url = git://github.com/GameOfLife/Unit-Lib.git
+[submodule "submodules/sc3-plugins"]
+	path = submodules/sc3-plugins
+	url = git://sc3-plugins.git.sourceforge.net/gitroot/sc3-plugins/sc3-plugins
