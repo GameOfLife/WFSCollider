@@ -11,13 +11,29 @@
 	startup {
 		Document.implementationClass.startup;
 		// make a server window for the internal if you like
-		Server.internal.makeWindow;
+		// Server.internal.makeWindow;
 //		Server.local.makeWindow;
 		// uncomment if you use a startup file
-//		this.loadStartupFiles;
+		this.loadStartupFiles;
 		// uncomment if you have multiple help files
 //		Help.addToMenu;
 	}
+	
+	// all extension dirs point to inside the SCClassLibrary
+	systemExtensionDir { ^String.scDir +/+ "SCClassLibrary/Extensions" }
+	userExtensionDir { ^String.scDir +/+ "SCClassLibrary/Extensions" }
+	
+	// make sure the real AppSupportDir is not used (quarks also go into app's contents)
+	userAppSupportDir { ^String.scDir }
+	systemAppSupportDir { ^String.scDir }
+	
+	/*
+	findHelpFile { | string |
+		^Help.findHelpFile( string );
+		//^this.primitiveFailed
+	}
+	*/
+	
 }
 
 + Main {
@@ -35,6 +51,7 @@
 		// otherwise, if your application has a problem, the user will
 		// be stuck with a process, possibly making sound, that he won't know
 		// how to kill.
+		
 		Server.default = Server.internal;
 		interpreter.s = Server.default;
 
@@ -50,7 +67,7 @@
 
 		// One can boot the server, then use .load to evaluate a file
 		// OR - put things into a class... like the SCSA_Demo
-
+		/*
 		"Welcome to Standalone Demo made with SuperCollider, type cmd-d for help.".postln;
 
 		Server.default.boot;
@@ -59,6 +76,7 @@
 			SCSA_Demo.new("The Cheese Stands Alone", Rect(400, 400, 300, 200), interpreter.s).front;
 //			(String.scDir.dirname ++ "/MFBSD.rtf").load;
 		});
+		*/
 		// close post window if user should not have it
 //		Document.listener.close
 	}
