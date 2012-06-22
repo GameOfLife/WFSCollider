@@ -12,14 +12,13 @@ definitionlist::
 ## link::Browse:: || Browse all documents by categories
 ::
 
-SECTION::Getting started
+SECTION::Getting started with WFSCollider
 
-These might be useful starting points on getting help with SuperCollider:
+These might be useful starting points on getting help with WFSCollider:
 
 definitionlist::
 ## link::Tutorials/Getting-Started/00-Getting-Started-With-SC##Getting Started tutorial series:: || Get started with SuperCollider
-## link::Guides/Glossary:: || Glossary
-## link::Guides/ClientVsServer:: || Explaining the client vs server architecture.
+## link::Guides/WFSCollider-Overview:: || Overview
 ## link::Guides/More-On-Getting-Help:: || How to find more help
 ::
 
