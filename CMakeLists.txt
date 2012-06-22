@@ -520,3 +520,6 @@ mark_as_advanced(JACK JACK_INCLUDE_DIR JACK_LIBRARY)
 mark_as_advanced(MATH_LIBRARY)
 mark_as_advanced(QT_QMAKE_EXECUTABLE)
 mark_as_advanced(SNDFILE)
+
+option (WFS "type of WFS deployment. Can be OFFLINE, GAMEOFLIFE, DEV" OFFLINE)
+

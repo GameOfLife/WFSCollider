@@ -259,6 +259,64 @@ endif(SNDFILE_FOUND)
 
 target_link_libraries(${scappbundlename} ${PTHREADS_LIBRARY})
 
+
+file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${scappbundlename}.app/Contents/Resources/SCClassLibrary/Extensions/Quarks")
+
+install( DIRECTORY "${PROJECT_SOURCE_DIR}/submodules/quarks/wslib"
+    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/${scappbundlename}.app/Contents/Resources/SCClassLibrary/Extensions/Quarks"
+)
+
+install( DIRECTORY "${PROJECT_SOURCE_DIR}/submodules/quarks/XML"
+    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/${scappbundlename}.app/Contents/Resources/SCClassLibrary/Extensions/Quarks"
+)
+
+install( DIRECTORY "${PROJECT_SOURCE_DIR}/submodules/quarks/NetLib"
+    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/${scappbundlename}.app/Contents/Resources/SCClassLibrary/Extensions/Quarks"
+)
+
+install( DIRECTORY "${PROJECT_SOURCE_DIR}/submodules/quarks/VectorSpace"
+    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/${scappbundlename}.app/Contents/Resources/SCClassLibrary/Extensions/Quarks"
+)
+
+install( DIRECTORY "${PROJECT_SOURCE_DIR}/submodules/quarks/MathLib"
+    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/${scappbundlename}.app/Contents/Resources/SCClassLibrary/Extensions/Quarks"
+)
+
+if(WFS STREQUAL "DEV")
+    message(STATUS "Creating symlink of WFSCollider submodules into the app bundle" )
+    install( CODE "EXECUTE_PROCESS(COMMAND ln -s \"${PROJECT_SOURCE_DIR}/submodules/WFS Library\"
+	\"${CMAKE_CURRENT_BINARY_DIR}/${scappbundlename}.app/Contents/Resources/SCClassLibrary/Extensions\" )" )
+	install( CODE "EXECUTE_PROCESS(COMMAND ln -s \"${PROJECT_SOURCE_DIR}/submodules/Unit Lib\"
+	\"${CMAKE_CURRENT_BINARY_DIR}/${scappbundlename}.app/Contents/Resources/SCClassLibrary/Extensions\" )" )
+endif(WFS STREQUAL "DEV")
+if(WFS STREQUAL "OFFLINE")
+    message(STATUS "Copying WFSCollider submodules into the app bundle ") 
+    install( DIRECTORY "${PROJECT_SOURCE_DIR}/submodules/WFS Library"
+	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/${scappbundlename}.app/Contents/Resources/SCClassLibrary/Extensions/"
+	PATTERN .git EXCLUDE
+    )
+    install( DIRECTORY "${PROJECT_SOURCE_DIR}/submodules/Unit Lib"
+	DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/${scappbundlename}.app/Contents/Resources/SCClassLibrary/Extensions/"
+	PATTERN .git EXCLUDE
+    )
+endif(WFS STREQUAL "OFFLINE")
+if(WFS STREQUAL "GAMEOFLIFE")
+    message(STATUS "Copying WFSCollider submodules to a folder next to the app bundle ")
+    install( DIRECTORY "${PROJECT_SOURCE_DIR}/submodules/WFS Library"
+	DESTINATION ${scappdir}
+	PATTERN .git EXCLUDE
+    )
+    install( CODE "EXECUTE_PROCESS(COMMAND ln -sf \"../../../../../WFS Library\"
+	\"${CMAKE_CURRENT_BINARY_DIR}/${scappbundlename}.app/Contents/Resources/SCClassLibrary/Extensions/WFS Library\" )" )
+	install( DIRECTORY "${PROJECT_SOURCE_DIR}/submodules/Unit Lib"
+	DESTINATION ${scappdir}
+	PATTERN .git EXCLUDE
+    )
+    install( CODE "EXECUTE_PROCESS(COMMAND ln -sf \"../../../../../Unit Lib\" 
+	\"${CMAKE_CURRENT_BINARY_DIR}/${scappbundlename}.app/Contents/Resources/SCClassLibrary/Extensions/Unit Lib\" )" )  
+endif(WFS STREQUAL "GAMEOFLIFE")
+
+
 install(TARGETS ${scappbundlename} DESTINATION ${scappbundlename})
 
 if (NOT ("${standalone}" STREQUAL ""))
