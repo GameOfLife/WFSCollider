@@ -9,6 +9,10 @@
 	}
 
 	startup {
+		Server.program = "exec '%/scsynth' -U '%/plugins/'".format(String.scDir, String.scDir);
+
+		Score.program = Server.program;
+		
 		Document.implementationClass.startup;
 		// make a server window for the internal if you like
 		// Server.internal.makeWindow;
@@ -57,6 +61,8 @@
 
 			// some folder paths that should point inside the app's Contents folder
 		SynthDef.synthDefDir = String.scDir +/+ "synthdefs/";
+		"SC_SYNTHDEF_PATH".setenv( SynthDef.synthDefDir.escapeChar( $  ) );
+		
 		Archive.archiveDir = String.scDir;
 
 		this.platform.startup;
