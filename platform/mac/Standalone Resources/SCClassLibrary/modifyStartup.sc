@@ -61,7 +61,7 @@
 
 			// some folder paths that should point inside the app's Contents folder
 		SynthDef.synthDefDir = String.scDir +/+ "synthdefs/";
-		"SC_SYNTHDEF_PATH".setenv( SynthDef.synthDefDir.escapeChar( $  ) );
+		"SC_SYNTHDEF_PATH".setenv( SynthDef.synthDefDir );
 		
 		Archive.archiveDir = String.scDir;
 
