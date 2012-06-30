@@ -9,8 +9,11 @@
 	}
 
 	startup {
-		Server.program = "exec '%/scsynth' -U '%/plugins/'".format(String.scDir, String.scDir);
-
+		Server.program = "exec % -U %".format(
+			(String.scDir +/+ "scsynth").shellQuote, 
+			(String.scDir +/+ "plugins").shellQuote
+		);
+		
 		Score.program = Server.program;
 		
 		Document.implementationClass.startup;
