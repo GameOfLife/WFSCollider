@@ -29,9 +29,7 @@ To install, just drag the application to your applications folder.
 
 ## Building ##
 
-Get the source:
-
-	git clone --recursive git://github.com/GameOfLife/WFSCollider.git
+Run the following commands:
 
 ```
 git clone git://github.com/GameOfLife/WFSCollider.git
@@ -39,6 +37,15 @@ cd WFSCollider/
 git checkout -b origin/3.5sampleJune2012
 git submodule init
 git submodule update
+cd submodules/sc3-plugins
+git submodule init
+git submodule update
+mkdir build
+cd build
+cmake -DSC_PATH=../../../ ..
+make -j4
+make install
+cd ../../../
 mkdir build
 cd build
 cmake -D standalone:string=WFSCollider -DSC_QT=OFF -DWFS=GAMEOFLIFE -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_SYSROOT="/Developer/SDKs/MacOSX10.6.sdk" ..
@@ -50,6 +57,7 @@ open WFSCollider.app
 ```
 
 for dual cores use -j4 for quad cores -j8, etc. The application will then be in ./build/WFSCollider/
+
 Depending on the situation change the cmake line:
 
 For development work do
