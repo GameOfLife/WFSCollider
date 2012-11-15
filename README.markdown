@@ -33,16 +33,24 @@ Get the source:
 
 	git clone --recursive git://github.com/GameOfLife/WFSCollider.git
 
-Go to the folder created and switch to the wfscurrent_cmake_sample_sched branch
+```
+git clone git://github.com/GameOfLife/WFSCollider.git
+cd WFSCollider/
+git checkout -b origin/3.5sampleJune2012
+git submodule init
+git submodule update
+mkdir build
+cd build
+cmake -D standalone:string=WFSCollider -DSC_QT=OFF -DWFS=GAMEOFLIFE -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_SYSROOT="/Developer/SDKs/MacOSX10.6.sdk" ..
+make -j8
+make install
+cd WFSCollider
+dylibbundler -of -b -x WFSCollider.app/Contents/MacOS/WFSCollider -p @executable_path/../Resources/ -d WFSCollider.app/Contents/Resources/
+open WFSCollider.app
+```
 
-	git checkout wfscurrent_cmake_sample_sched
-
-then
-    mkdir build
-    cd build
-    cmake -D standalone:string=WFSCollider -DSC_QT=OFF -DCMAKE_BUILD_TYPE=Release ..
-    make install -j8
 for dual cores use -j4 for quad cores -j8, etc. The application will then be in ./build/WFSCollider/
+Depending on the situation change the cmake line:
 
 For development work do
 
@@ -69,7 +77,7 @@ WFSPrePanSynthDefs.generateAll;
 WFSPreviewSynthDefs.generateAll;
 
 And until 3.5 lib bundling is fixed:
-    dylibbundler -of -b -x WFSCollider.app/Contents/MacOS/WFSCollider -p @executable_path/../Resources/ -d WFSCollider.app/Contents/Resources/
+    dylibbundler -of -b -x WFSCollider.app/Contents/MacOS/WFSCollider -p @executable_path/../Resources/ -d WFSCollider.app/Contents/Resources/    
 
 ## Acknowledgments ##
 WFSCollider was conceived by the Game Of Life Foundation, and developed by W. Snoei, R. Ganchrow and J. Truetzschler and M. Negrão.
