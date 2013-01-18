@@ -21,7 +21,7 @@ Mac OS X 10.5 or greater
 
 ## Download ##
 
-A prepackaged version is available from the download section at [github](https://github.com/GameOfLife/WFSCollider).
+A prepackaged version is available [here](http://www.woutersnoei.nl/wfs/).
 
 ## Installation ##
 
