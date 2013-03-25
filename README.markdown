@@ -3,25 +3,27 @@ GameOfLife WFSCollider - Wave Field Synthesis spatialization for SuperCollider.
 
 GameOfLife WFSCollider is an adapted version of SuperCollider, the audio synthesis engine and programming language, for Wave Field Synthesis spatialization.
 
-It's currently being used in the 192 speakers system of the [Game Of Life Foundation](http://gameoflife.nl/en), based in Leiden, the Netherlands.
+It's currently being used in the 192 speakers system of the [Game Of Life Foundation](http://gameoflife.nl/en), based in The Hague, the Netherlands.
 
 WFSCollider consists of an audio spatialization engine that places individual sound sources in space according to the principles of [Wave Field Synthesis](http://en.wikipedia.org/wiki/Wave_field_synthesis).
 
-The system is currently allows to import mono sound files and place them in a score editor where start times, and durations can be set and trajectories or positions assigned to each event.
+The system allows soundfiles, live input and synthesis processes to be placed in a score editor where start times, and durations can be set and trajectories or positions assigned to each event. It also allows realtime changement of parameters and on the fly starting and stopping of events via GUI or OSC control. Each event can be composed of varous objects ("units") in a processing chain.
 
-Each score can be saved as an xml file.
+Score files are saved as executable SuperCollider code. The system is setup in a modular way and can be scripted and expanded using the SuperCollider language.
 
 ## Getting Help ##
 
 Start WFSCollider, in the menubar go to Help->SuperColliderHelp then click on "Home" and then "WFSCollider V2.0 Overview"
 
+A full PDF manual is available [here](http://sourceforge.net/projects/wfscollider/files/WFSCollider%20Manual/Working%20with%20WFSCollider%20v2.pdf/download)
+
 ## System Requirements ##
 
-Mac OS X 10.5 or greater
+Mac OS X 10.6 or greater
 
 ## Download ##
 
-A prepackaged version is available [here](http://www.woutersnoei.nl/wfs/).
+A prepackaged version is available [here](https://sourceforge.net/projects/wfscollider/).
 
 ## Installation ##
 
